@@ -8,21 +8,11 @@ _SUCCESSFUL_STATUS_CODE = 200
 _COMPONENT_DELIMITER = '|'
 _BASE_URL = 'https://clinicaltrials.gov/api/v2/studies'
 
-def request_raw_data_from_api(
-    request_params: Mapping[str, Any] = {
-        # TODO: Update back to United States
-        'query.locn': 'USA',
-        'fields': 'protocolSection',
-        'pageSize': 100,
-    },
-) -> pd.DataFrame:
+def request_raw_data_from_api(request_params: Mapping[str, Any]) -> pd.DataFrame:
     data_list = []
 
     # Loop through all pages of results
     while True:
-        # Print the current URL (for debugging purposes)
-        print('Fetching data from:', _BASE_URL + '?' + '&'.join([f'{k}={v}' for k, v in request_params.items()]))
-        
         # Send a GET request to the API
         response = requests.get(_BASE_URL, params=request_params)
 
@@ -82,12 +72,15 @@ def request_raw_data_from_api(
 
     # Create a DataFrame from the list of dictionaries
     raw_data_df = pd.DataFrame(data_list)
+
+    # Print status message
+    print(f'Fetched data for {len(raw_data_df)} records.\n')
     return raw_data_df
 
 
 def commit_raw_data_to_duckdb(
     conn: duckdb.DuckDBPyConnection,
-    raw_data_df: pd.DataFrame,
+    raw_df: pd.DataFrame,
 ) -> None:
     """Saves raw data from Pandas DataFrame into DuckDB table"""
     # Define schema for raw data table
@@ -111,7 +104,7 @@ def commit_raw_data_to_duckdb(
 
     # Populate the table from the Pandas DataFrame
     conn.execute(
-        "INSERT INTO trial_data_raw SELECT * FROM raw_data_df"
+        "INSERT INTO trial_data_raw SELECT * FROM raw_df"
     )
 
     # Commit the transaction to save changes

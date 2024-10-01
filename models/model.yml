@@ -1,0 +1,40 @@
+version: 2
+
+sources:
+  - name: trial_db
+    description: "This model contains post-transform, cleaned trial data"
+    schema: main
+    # database: trial_db
+    tables:
+      - name: trial_data_transformed
+        description: "This table contains raw trial data for analysis."
+        columns:
+          - name: nctId
+            description: "study ID number"
+            tests:
+              - not_null
+          - name: briefTitle
+            description: "study title, short"
+          - name: officialTitle
+            description: "study title, long"
+          - name: overallStatus
+            description: "recruitment status of study"
+          - name: conditionsArray
+            description: "list of all conditions targeted by study"
+          - name: interventionsArray
+            description: "list of all interventions performed by study"
+          - name: studyFirstPostDate
+            description: "date of first study post"
+          - name: lastUpdatePostDate
+            description: "date of most recent update"
+          - name: phases
+            description: "phase of the study"
+          - name: studyType
+            description: "study type, e.g., INTERVENTIONAL"
+          - name: requiredSex
+            description: "required participant sex"
+          - name: requiredMinimumAge
+            description: "required minimum participant age in years"
+          - name: requiredMaximumAge
+            description: "required maximum participant age in years"
+          

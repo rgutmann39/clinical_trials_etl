@@ -37,8 +37,8 @@ sources:
             meta:
               common_values: ["EXPANDED_ACCESS", "INTERVENTIONAL", "OBSERVATIONAL"]
           - name: sex
-            description: "patient sex"
+            description: "required sex"
           - name: minimumAge
-            description: "patient minimum age"
+            description: "required minimum age"
           - name: maximumAge
-            description: "patient maximum age"
+            description: "required maximum age"
