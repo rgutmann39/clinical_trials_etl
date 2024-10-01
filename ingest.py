@@ -1,6 +1,8 @@
 '''Module for ingesting raw data from clinicaltrials.gov'''
 import requests
 import pandas as pd
+import duckdb
+import os
 
 _SUCCESSFUL_STATUS_CODE = 200
 _COMPONENT_DELIMITER = '|'
@@ -54,19 +56,18 @@ while True:
             minimumAge = study['protocolSection'].get('eligibilityModule', {}).get('minimumAge', '')
             maximumAge = study['protocolSection'].get('eligibilityModule', {}).get('maximumAge', '')
 
-
             # Append the data to the list as a dictionary
             data_list.append({
-                'NCT Id': nctId,
-                'Brief Title': briefTitle,
-                'Official Title': officialTitle,
-                'Overall Status': overallStatus,
-                'Conditions': conditions,
-                'Interventions': interventions,
-                'Study First Post Date': studyFirstPostDate,
-                'Last Update Post Date': lastUpdatePostDate,
-                'Phases': phases,
-                'Study Type': studyType,
+                'nctId': nctId,
+                'briefTitle': briefTitle,
+                'officialTitle': officialTitle,
+                'overallStatus': overallStatus,
+                'conditions': conditions,
+                'interventions': interventions,
+                'studyFirstPostDate': studyFirstPostDate,
+                'lastUpdatePostDate': lastUpdatePostDate,
+                'phases': phases,
+                'studyType': studyType,
                 'sex': sex,
                 'minimumAge': minimumAge,
                 'maximumAge': maximumAge,
@@ -81,11 +82,34 @@ while True:
         break
 
 # Create a DataFrame from the list of dictionaries
-df = pd.DataFrame(data_list)
+trials_df = pd.DataFrame(data_list)
 
-# TODO: Remove
-# Print the DataFrame
-print(f'DataFrame shape: {df.shape}')
+# # Save data to CSV
+# trials_df.to_csv('clinical_trials_data.csv', index=False)
 
-# Save data to CSV
-df.to_csv('clinical_trials_data.csv', index=False)
+# Saving ingested data into DuckDB
+
+# Connect to a DuckDB database file (it will be created if it doesn't exist)
+conn = duckdb.connect('trially.trial_db')
+
+# Create a new table with defined schema
+conn.execute("""
+CREATE TABLE IF NOT EXISTS trial_info (
+    id INTEGER,
+    name VARCHAR,
+    age INTEGER
+)
+""")
+
+# Populate the table from the Pandas DataFrame
+conn.execute(
+    "INSERT INTO trial_info SELECT * FROM trials_df",
+    {'trials_df': trials_df}
+)
+
+# Commit the changes and close the connection
+conn.commit()
+conn.close()
+
+# Start DuckDB in web mode
+os.system("duckdb -web")
