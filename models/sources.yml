@@ -1,0 +1,44 @@
+version: 2
+
+sources:
+  - name: trial_db
+    schema: main
+    database: trial_db
+    tables:
+      - name: trial_data_raw
+        description: "This table contains raw trial data for analysis."
+        columns:
+          - name: nctId
+            description: "study ID number"
+            tests:
+              - not_null
+          - name: briefTitle
+            description: "study title, short"
+          - name: officialTitle
+            description: "study title, long"
+          - name: overallStatus
+            description: "recruitment status of study"
+          - name: conditions
+            description: "patient conditions being targeted within study"
+          - name: interventions
+            description: "interventions being applied by study"
+          - name: studyFirstPostDate
+            description: "date of first study post"
+          - name: lastUpdatePostDate
+            description: "date of most recent update"
+          - name: phases
+            description: "study phase"
+            tests:
+              - not_null
+            meta:
+              common_values: ["PHASE1", "PHASE2", "PHASE3", "PHASE4", "NA", "EARLY_PHASE1"]
+          - name: studyType
+            description: "type of study"
+            meta:
+              common_values: ["EXPANDED_ACCESS", "INTERVENTIONAL", "OBSERVATIONAL"]
+          - name: sex
+            description: "patient sex"
+          - name: minimumAge
+            description: "patient minimum age"
+          - name: maximumAge
+            description: "patient maximum age"

@@ -1,0 +1,6 @@
+trially_duckdb_profile:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: 'trial_db'

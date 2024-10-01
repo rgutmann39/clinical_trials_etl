@@ -1,0 +1,14 @@
+name: 'trially'
+version: '1.0'
+profile: 'trially_duckdb_profile'
+
+# Define where the models are located
+model-paths: ["models"]
+
+# Specify where to save the output
+target-path: "target"
+
+# Database configurations
+models:
+  trially:
+    +materialized: table

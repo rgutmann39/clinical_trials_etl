@@ -8,8 +8,13 @@ _SUCCESSFUL_STATUS_CODE = 200
 _COMPONENT_DELIMITER = '|'
 _BASE_URL = 'https://clinicaltrials.gov/api/v2/studies'
 
-def _request_raw_data_from_api(
-    request_params: Mapping[str, Any],
+def request_raw_data_from_api(
+    request_params: Mapping[str, Any] = {
+        # TODO: Update back to United States
+        'query.locn': 'USA',
+        'fields': 'protocolSection',
+        'pageSize': 100,
+    },
 ) -> pd.DataFrame:
     data_list = []
 
@@ -80,15 +85,11 @@ def _request_raw_data_from_api(
     return raw_data_df
 
 
-def _save_raw_data_to_duckdb(
+def commit_raw_data_to_duckdb(
     conn: duckdb.DuckDBPyConnection,
     raw_data_df: pd.DataFrame,
 ) -> None:
-    """Saves raw data from Padas DataFrame into 'trial_data_raw' DuckDB table"""
-    # TODO: remove
-    # # Save data to CSV
-    # trials_df.to_csv('clinical_trials_data.csv', index=False)
-
+    """Saves raw data from Pandas DataFrame into DuckDB table"""
     # Define schema for raw data table
     conn.execute("""
     CREATE OR REPLACE TABLE trial_data_raw (
@@ -110,26 +111,8 @@ def _save_raw_data_to_duckdb(
 
     # Populate the table from the Pandas DataFrame
     conn.execute(
-        f"INSERT INTO trial_data_raw SELECT * FROM raw_data_df"
+        "INSERT INTO trial_data_raw SELECT * FROM raw_data_df"
     )
 
     # Commit the transaction to save changes
     conn.commit()
-
-
-def ingest_data(
-    conn: duckdb.DuckDBPyConnection,
-    request_params: Mapping[str, Any] = {
-        # TODO: Update back to United States
-        'query.locn': 'USA',
-        'fields': 'protocolSection',
-        'pageSize': 100,
-    },
-) -> None:
-    raw_data_df = _request_raw_data_from_api(
-        request_params=request_params,
-    )
-    _save_raw_data_to_duckdb(
-        conn=conn,
-        raw_data_df=raw_data_df,
-    )

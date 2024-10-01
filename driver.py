@@ -1,16 +1,29 @@
 """Driver module to orchestrate pipeline workflow"""
 import duckdb
-from ingest import ingest_data
+from ingest import (
+    request_raw_data_from_api,
+    commit_raw_data_to_duckdb,
+)
+import os
 
-# Establish DuckDB connection
-conn = duckdb.connect('trially.trial_db')
 
-# INGEST
-ingest_data(conn=conn)
+def main():
+    db_path = 'trial_db'
 
-result = conn.execute("SELECT COUNT(*) FROM trial_data_raw").fetchall()
+    # INGEST
+    raw_data_df = request_raw_data_from_api()
+    with duckdb.connect(db_path) as conn:
+        commit_raw_data_to_duckdb(
+            conn=conn,
+            raw_data_df=raw_data_df,
+        )
+        # result = conn.execute("SELECT count(*) FROM trial_data_raw").fetchall()
+        # print(result[0][0])
 
-print(result[0][0])
+    # TRANSFORM
+    os.system('dbt run')
+        
 
-# Close the connection
-conn.close()
+
+if __name__ == "__main__":
+    main()
