@@ -1,15 +1,6 @@
 # Use the official Python image
 FROM python:3.10
 
-# # Set the working directory in the container
-# WORKDIR /driver
-
-ADD driver.py .
-ADD ingest.py .
-ADD infer.py .
-ADD validate.py .
-ADD models/trial_data_transformed.sql .
-
 # Copy the requirements file into the container
 COPY requirements.txt .
 

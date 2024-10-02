@@ -70,12 +70,8 @@ def request_raw_data_from_api(request_params: Mapping[str, Any]) -> pd.DataFrame
             print('Failed to fetch data. Status code:', response.status_code)
             break
 
-    # Create a DataFrame from the list of dictionaries
-    raw_data_df = pd.DataFrame(data_list)
-
-    # Print status message
-    print(f'Fetched data for {len(raw_data_df)} records.\n')
-    return raw_data_df
+    # Return a DataFrame from the list of dictionaries
+    return pd.DataFrame(data_list)
 
 
 def commit_raw_data_to_duckdb(

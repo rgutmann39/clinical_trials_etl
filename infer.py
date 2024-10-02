@@ -3,6 +3,7 @@ from openai import OpenAI
 from typing import List
 import duckdb
 import pandas as pd
+from tqdm import tqdm
 
 def _contains_chemo(interventions: str, client) -> bool:
     # client = OpenAI()
@@ -26,9 +27,14 @@ def _contains_chemo(interventions: str, client) -> bool:
 
 
 def aggregated_contains_chemo(aggregated_interventions: List[str]) -> List[bool]:
-    contains_chemo_results = []
+    # TODO: Before running docker build:
+    # 1. comment out default client initialization
+    # 2. uncomment the custom client initialization by adding a real API key
     client = OpenAI()
-    for interventions in aggregated_interventions:
+    # client = OpenAI(api_key="<real_api_key>")
+    
+    contains_chemo_results = []
+    for interventions in tqdm(aggregated_interventions):
         contains_chemo_results.append(_contains_chemo(interventions, client))
     return contains_chemo_results
 

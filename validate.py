@@ -69,15 +69,15 @@ def test_llm_inferences(inference_df: pd.DataFrame) -> None:
         (num_positive_golds_present + num_negative_golds_present) * 100
     )
     print(
-        f'Accuracy among positive golds: {accuracy_positive_golds}% ' +
+        f'LLM accuracy among trials HAVING chemothrerapy: {accuracy_positive_golds}% ' +
         f'({num_positive_golds_correct} / {num_positive_golds_present})'
     )
     print(
-        f'Accuracy among negative golds: {accuracy_negative_golds}% ' +
+        f'LLM accuracy among trials NOT HAVING chemothrerapy: {accuracy_negative_golds}% ' +
         f'({num_negative_golds_correct} / {num_negative_golds_present})'
     )
     print(
-        f'Accuracy among combined golds: {accuracy_combined_golds}% ' +
+        f'LLM accuracy among COMBINED trials: {accuracy_combined_golds}% ' +
         f'({num_positive_golds_correct + num_negative_golds_correct} / ' +
         f'{num_positive_golds_present + num_negative_golds_present})'
     )
