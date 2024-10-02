@@ -8,6 +8,10 @@ from infer import (
     aggregated_contains_chemo,
     commit_inferred_data_to_duckdb,
 )
+from validate import (
+    test_llm_inferences,
+    GOLD_LABEL_NCT_IDS,
+)
 import os
 
 REQUEST_PARAMS = {
@@ -40,8 +44,7 @@ def main():
         # column before converting back to DuckDB
         # TODO: Remove limit statement
         # inferred_df = conn.execute("SELECT * FROM trial_data_transformed").fetchdf()
-        inferred_df = conn.execute("SELECT * FROM trial_data_transformed limit 15").fetchdf()
-
+        inferred_df = conn.execute("SELECT * FROM trial_data_transformed limit 100").fetchdf()
 
         # cleaning intervention lists before passing strings to LLM
         aggregated_intervention_lists = [
@@ -51,13 +54,20 @@ def main():
 
         # Querying LLM to determine which interventions contain chemo
         inferred_df['contains_chemo'] = aggregated_contains_chemo(aggregated_intervention_lists)
+        
+        # commit new DuckDB table w/ LLM predictions about whether study contains chemo
         commit_inferred_data_to_duckdb(
             conn=conn,
             inferred_df=inferred_df,
         )
 
-        # trial_data_inferred = conn.execute("SELECT * FROM trial_data_inferred").fetchall()
-        # print(trial_data_inferred)
+        # VALIDATE
+        where_clause = "'" + "', '".join(GOLD_LABEL_NCT_IDS) + "'"
+        inference_df = conn.execute(
+            "SELECT nctId, contains_chemo FROM trial_data_inferred " +
+            f"WHERE nctId IN ({where_clause})"
+        ).fetchdf()
+        test_llm_inferences(inference_df)
 
 
 if __name__ == "__main__":
