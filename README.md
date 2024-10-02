@@ -20,4 +20,4 @@ Steps to Run Application in a Docker Container:
 Next Steps Toward Productionization of this Pipeline:
 1. Batching of inputs during LLM calls: Since inference is currently the time bottleneck, batching of inputs would produce a significant time speed-up.
 2. More expansive LLM testing and prompt engineering: Before associating an attribute with a trial in a production setting, the level of confidence in the prediction should be increased by increasing the size of the gold set and iterating on the prompt until a suitable accuracy has been achieved.
-3. Easier pipeline orchestration: Since the pipeline workload scales with the number of trials queried, wrapping the pipeline in an Airflow DAG would make the pipeline orchestration easier overall. This would also abstract away the role of the driver module since Airflow manages task dependencies.
+3. Easier pipeline orchestration: Since the pipeline workload scales with the number of trials queried, wrapping the pipeline in an Airflow DAG would make the pipeline orchestration easier once the workloads were larger. This would also abstract away the role of the driver module since Airflow manages task dependencies.
