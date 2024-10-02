@@ -4,7 +4,6 @@ sources:
   - name: trial_db
     description: "This model contains post-transform, cleaned trial data"
     schema: main
-    # database: trial_db
     tables:
       - name: trial_data_transformed
         description: "This table contains raw trial data for analysis."
