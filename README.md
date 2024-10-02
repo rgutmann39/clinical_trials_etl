@@ -13,4 +13,5 @@ Steps to Run Application in a Docker Container:
 3. Within the infer.py file, update the client instantiation in line 34 with a real OpenAI API key. This update is required for Docker containerization.
 4. Boot up Docker.
 6. Build the Docker image by running the following command: "docker build -t trially_container ."
-7. Run the Docker container by running the following command: "docker run -p 8080:8080 -v trial_db:/app/trial_db trially_container"
+7. Verify that the Docker image was successfully built by running: "docker image ls | grep trially_container". If this returns a line starting with "trially_container", the build was successful.
+8. Run the Docker container by running the following command: "docker run -p 8080:8080 -v trial_db:/app/trial_db trially_container"
