@@ -11,9 +11,7 @@ transformed as (
     overallStatus,
     string_split(conditions, '|') as conditionsArray,
     string_split(interventions, '|') as interventionsArray,
-    -- TODO: parse to date
     studyFirstPostDate,
-    -- TODO: parse to date
     lastUpdatePostDate,
     phases,
     studyType,
