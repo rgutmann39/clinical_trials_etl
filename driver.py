@@ -12,15 +12,20 @@ from validate import (
     test_llm_inferences,
     GOLD_LABEL_NCT_IDS,
 )
+from flask import Flask
 import os
 
 REQUEST_PARAMS = {
     'query.cond': 'Cancer',
+    # Note: Setting location to 'United States' inflates result quantity too much
     'query.locn': 'USA',
     'fields': 'protocolSection',
     'pageSize': 100,
 }
 
+app = Flask(__name__)
+
+@app.route('/')
 def main():
     db_path = 'trial_db'
 
@@ -42,9 +47,11 @@ def main():
     with duckdb.connect(db_path) as conn:
         # Materialize trial_data_transformed table in Pandas DataFrame to add new 'contains_chemo'
         # column before converting back to DuckDB
-        # TODO: Remove limit statement
-        # inferred_df = conn.execute("SELECT * FROM trial_data_transformed").fetchdf()
-        inferred_df = conn.execute("SELECT * FROM trial_data_transformed limit 100").fetchdf()
+        # print(conn.execute("SHOW TABLES").fetchdf())
+
+        # # TODO: Remove limit statement
+        # # inferred_df = conn.execute("SELECT * FROM trial_data_transformed").fetchdf()
+        inferred_df = conn.execute("SELECT * FROM trial_data_transformed limit 45").fetchdf()
 
         # cleaning intervention lists before passing strings to LLM
         aggregated_intervention_lists = [
@@ -71,4 +78,5 @@ def main():
 
 
 if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=8080)  # Set the desired port here
     main()

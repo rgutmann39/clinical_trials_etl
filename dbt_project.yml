@@ -10,5 +10,5 @@ target-path: "target"
 
 # Database configurations
 models:
-  trially:
+  trial_data_transformed:
     +materialized: table

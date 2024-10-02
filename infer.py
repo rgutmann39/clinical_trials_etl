@@ -4,8 +4,8 @@ from typing import List
 import duckdb
 import pandas as pd
 
-def _contains_chemo(interventions: str) -> bool:
-    client = OpenAI()
+def _contains_chemo(interventions: str, client) -> bool:
+    # client = OpenAI()
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
@@ -27,8 +27,9 @@ def _contains_chemo(interventions: str) -> bool:
 
 def aggregated_contains_chemo(aggregated_interventions: List[str]) -> List[bool]:
     contains_chemo_results = []
+    client = OpenAI()
     for interventions in aggregated_interventions:
-        contains_chemo_results.append(_contains_chemo(interventions))
+        contains_chemo_results.append(_contains_chemo(interventions, client))
     return contains_chemo_results
 
 
