@@ -20,7 +20,7 @@ Validate the accuracy of the LLM predictions (validate.py)
 
 
 ## How to Run Application in a Docker Container
-1. Clone this repository
+1. Clone this repository.
 2. Within the CLI, set the working directory to the base of this repository.
 3. Within the infer.py file, update the client instantiation in line 34 with a real OpenAI API key. This update is required for Docker containerization.
 4. Ensure that Docker is running.
