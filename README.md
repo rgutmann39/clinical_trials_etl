@@ -1,11 +1,13 @@
 # Clinical Trials: ETL, LLM Integration, Docker
 
 ## Overview
+This ETL data pipeline pulls raw data from [clinicaltrials.gov](clinicaltrials.gov), cleans the data, and integrates with OpenAI's LLM API to infer additional trial information. The full application is available to run in a Docker Container.
+
 ### Pipeline Orchestration
 Execute full pipeline logic sequentially (driver.py)
 
 ### Extract
-Extract clinical trial data from clinicaltrials.gov using a web API (ingest.py)
+Extract clinical trial data from [clinicaltrials.gov](clinicaltrials.gov) using a web API (ingest.py)
 
 ### Transform
 Transform raw data to structured data (models/trial_data_transformed.sql)
