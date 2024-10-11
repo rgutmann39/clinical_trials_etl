@@ -6,16 +6,16 @@ This ETL data pipeline pulls raw data from [clinicaltrials.gov](clinicaltrials.g
 ### Pipeline Orchestration
 Execute full pipeline logic sequentially (driver.py)
 
-### Extract
+### Extraction
 Extract clinical trial data from [clinicaltrials.gov](clinicaltrials.gov) using a web API (ingest.py)
 
-### Transform
+### Transformation
 Transform raw data to structured data (models/trial_data_transformed.sql)
 
-### Infer
+### Inference
 Integration with LLM API to infer whether a clinical trial likely contains any chemotherapy interventions (infer.py)
 
-### Validate
+### Validation
 Validate the accuracy of the LLM predictions (validate.py)
 
 
