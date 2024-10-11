@@ -1,4 +1,4 @@
-trially_duckdb_profile:
+clinical_trials_duckdb_profile:
   target: dev
   outputs:
     dev:

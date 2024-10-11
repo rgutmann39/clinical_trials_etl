@@ -1,6 +1,6 @@
-name: 'trially'
+name: 'clinical_trials'
 version: '1.0'
-profile: 'trially_duckdb_profile'
+profile: 'clinical_trials_duckdb_profile'
 
 # Define where the models are located
 model-paths: ["models"]
